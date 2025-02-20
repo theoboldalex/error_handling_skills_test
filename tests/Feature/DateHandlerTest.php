@@ -2,6 +2,8 @@
 
 namespace Tests\Feature;
 
+use Generator;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
 
 class DateHandlerTest extends TestCase
@@ -20,20 +22,20 @@ class DateHandlerTest extends TestCase
     * The PO beamed, blissfully unaware. "This will be easy, right?"
     * The team sighed in unison.
     */
-    public function test_the_application_handles_muggle_date_formats(): void
+    #[DataProvider('dateCases')]
+    public function test_the_application_handles_muggle_date_formats(string $date): void
     {
-        $dateFormats = [
-            '2025-02-23', // Y-m-d
-            '23-02-2025', // d-m-Y
-            '23/02/25',   // d/m/y
-            '23/02/2025', // d/m/Y
-        ];
+        $this->get("/fix_my_date_handling?date=$date")
+            ->assertOk()
+            ->assertContent('2025-02-23');
+    }
 
-        foreach ($dateFormats as $date) {
-            $this->get("/fix_my_date_handling?date=$date")
-                ->assertOk()
-                ->assertContent('2025-02-23');
-        }
+    public static function dateCases(): Generator
+    {
+        yield 'ISO-8601'  => ['2025-02-23']; // Y-m-d
+        yield 'Backwards' => ['23-02-2025']; // d-m-Y
+        yield 'Unhinged'  => ['23/02/25'];   // d/m/y
+        yield 'Y tho?'    => ['23/02/2025']; // d/m/Y
     }
 }
 
