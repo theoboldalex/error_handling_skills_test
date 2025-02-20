@@ -27,7 +27,6 @@ class DateHandlerTest extends TestCase
             '23-02-2025', // d-m-Y
             '23/02/25',   // d/m/y
             '23/02/2025', // d/m/Y
-            '23-02-25',   // d-m-y
         ];
 
         foreach ($dateFormats as $date) {

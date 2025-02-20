@@ -10,5 +10,5 @@ Route::get('/fix_my_date_handling', function (Request $request) {
         return 'You must pass a date in the query string';
     }
 
-    return Carbon::parse($request->get('date'))->format('Y-m-d');
+    return Carbon::parse($date)->format('Y-m-d');
 });
